@@ -1,27 +1,33 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-// import { router } from "./routes/route.js";
+const express = require('express');
 
-dotenv.config();
 const app = express();
-const port = 5000;
 
-app.use(cors());
-app.use(express.json());
-// app.use( "/api", router);
 
-app.get("/ping", (req, res)=>{
-    res.send("pong");
-})
-
-app.listen(port, () => {
-    console.log(`listening on port ${port}...`);
-})
+app.listen(process.env.PORT, () =>{
+    console.log(`Server listening on port: ${process.env.PORT}... ` );
+} )
 
 /*
-* Routes:
-* api/users/signup
-* api/users/login
-* api/users:id
-* */
+
+Routes :-
+
+lists :-
+GET     /lists
+POST    /lists
+GET     /lists/:listId
+PUT     /lists/:listId
+DELETE  /lists/:listId
+
+todos :-
+GET     /lists/:listId/todos           done
+POST    /lists/:listId/todos           done
+PUT     /lists/:listId/todos/:todoId   done
+DELETE  /lists/:listId/todos/:todoId   done
+GET     /lists/:listId/todos/:todoId   done
+
+users :-
+POST    /users/signup
+POST    /users/login
+GET     /users/current
+
+*/

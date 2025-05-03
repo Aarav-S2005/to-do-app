@@ -2,17 +2,15 @@ const { Router } = require('express');
 const { todoAddSchema, todoUpdateSchema} = require("./schemas/todoSchema")
 const authenticateUser = require('./middlewares/authMiddleware');
 const db = require("../db");
-const {route} = require("express/lib/application");
 
-const router = Router();
+const todoRouter = Router();
 
-router.use(authenticateUser);
+todoRouter.use(authenticateUser);
 
-router.get("/lists/:listId/todos", async (req, res) => {
+todoRouter.get("/lists/:listId/todos", async (req, res) => {
     const userId = req.userId;
 
-    const { listId } = req.params;
-
+    const  listId  = parseInt(req.params.listId);
     try {
         const [todos] = await db.execute(
             `SELECT t.* FROM todos t
@@ -35,10 +33,10 @@ router.get("/lists/:listId/todos", async (req, res) => {
     }
 });
 
-router.post("/lists/:listId/todos", async (req, res) => {
+todoRouter.post("/lists/:listId/todos", async (req, res) => {
     const todo = req.body;
     const result = todoAddSchema.safeParse(todo);
-    const { listId } = req.params;
+    const  listId  = parseInt(req.params.listId);
     const userId = req.userId;
     if (!result.success){
         return res.status(400).json({
@@ -69,9 +67,10 @@ router.post("/lists/:listId/todos", async (req, res) => {
     }
 });
 
-router.put("/lists/:listId/todos/:todoId", async (req, res) => {
+todoRouter.put("/lists/:listId/todos/:todoId", async (req, res) => {
 
-    const { listId, todoId } = req.params;
+    const  listId  = parseInt(req.params.listId);
+    const  todoId  = parseInt(req.params.todoId);
     const userId = req.userId;
     const todo = req.body;
     const result = todoUpdateSchema.safeParse(todo);
@@ -99,8 +98,7 @@ router.put("/lists/:listId/todos/:todoId", async (req, res) => {
                 description = COALESCE(?, description),
                 completed = COALESCE(?, completed),
                 due_date = COALESCE(?, due_date)
-            WHERE id = ? AND list_id = ?;
-        `, [
+            WHERE id = ? AND list_id = ?;`, [
             title || null,
             description || null,
             completed !== undefined ? completed : null,
@@ -117,9 +115,10 @@ router.put("/lists/:listId/todos/:todoId", async (req, res) => {
     }
 })
 
-router.delete("/lists/:listId/todos/:todoId", async (req, res) => {
+todoRouter.delete("/lists/:listId/todos/:todoId", async (req, res) => {
 
-    const { listId, todoId } = req.params;
+    const  listId  = parseInt(req.params.listId);
+    const  todoId  = parseInt(req.params.todoId);
     const userId = req.userId;
 
     try{
@@ -145,8 +144,9 @@ router.delete("/lists/:listId/todos/:todoId", async (req, res) => {
     }
 })
 
-router.get("/lists/:listId/todos/:todoId", async (req, res) => {
-    const { listId, todoId } = req.params;
+todoRouter.get("/lists/:listId/todos/:todoId", async (req, res) => {
+    const  listId  = parseInt(req.params.listId);
+    const  todoId  = parseInt(req.params.todoId);
     const userId = req.userId;
     try{
         const [ todoPresent ] = await db.execute(
@@ -168,4 +168,4 @@ router.get("/lists/:listId/todos/:todoId", async (req, res) => {
     }
 })
 
-module.exports = router;
+module.exports = todoRouter;

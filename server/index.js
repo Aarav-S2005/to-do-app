@@ -12,11 +12,11 @@ app.listen(process.env.PORT, () =>{
 Routes :-
 
 lists :-
-GET     /lists
-POST    /lists
-GET     /lists/:listId
-PUT     /lists/:listId
-DELETE  /lists/:listId
+GET     /lists                         done
+POST    /lists                         done
+GET     /lists/:listId                 done
+PUT     /lists/:listId                 done
+DELETE  /lists/:listId                 done
 
 todos :-
 GET     /lists/:listId/todos           done

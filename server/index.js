@@ -1,7 +1,9 @@
 const express = require('express');
-
+const router = require("./routes/route")
 const app = express();
 
+app.use(express.json());
+app.use("/", router);
 
 app.listen(process.env.PORT, () =>{
     console.log(`Server listening on port: ${process.env.PORT}... ` );
@@ -26,8 +28,8 @@ DELETE  /lists/:listId/todos/:todoId   done
 GET     /lists/:listId/todos/:todoId   done
 
 users :-
-POST    /users/signup
-POST    /users/login
-GET     /users/current
+POST    /users/signup                  done
+POST    /users/login                   done
+GET     /users/current                 done
 
 */

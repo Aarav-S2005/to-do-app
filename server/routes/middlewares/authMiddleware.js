@@ -12,7 +12,13 @@ const authenticateUser = (req, res, next) => {
         });
     }
 
-    const token = authorization.split(" ")[1];
+    const token = authorization.startsWith("Bearer ") ? authorization.split(" ")[1] : null;
+    if (!token) {
+        return res.status(401).json({
+            error : "unauthorized",
+            message: "no token provided"
+        })
+    }
     try{
         const decoded = jwt.verify(token, JWT_SECRET_KEY);
         req.userId = decoded.userId;

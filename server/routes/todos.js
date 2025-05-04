@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { todoAddSchema, todoUpdateSchema} = require("./schemas/todoSchema")
-const authenticateUser = require('./middlewares/authMiddleware');
+const { authenticateUser } = require('./middlewares/authMiddleware');
 const db = require("../db");
 
 const todoRouter = Router();

@@ -3,7 +3,8 @@ require("dotenv").config();
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
-const authenticateUser = (req, res, next) => {
+function authenticateUser(req, res, next) {
+    console.log("In Middleware")
     const authorization = req.headers.authorization;
     if (!authorization) {
         return res.status(401).json({
@@ -33,4 +34,4 @@ const authenticateUser = (req, res, next) => {
     }
 }
 
-module.exports = authenticateUser;
+module.exports = { authenticateUser };

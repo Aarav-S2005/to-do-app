@@ -5,8 +5,8 @@ const listRouter = require("./lists")
 
 const router = Router()
 
-router.use("/", todoRouter);
-router.use("/", listRouter);
-router.use("/", userRouter);
+router.use(userRouter);
+router.use(todoRouter);
+router.use(listRouter);
 
 module.exports = router;

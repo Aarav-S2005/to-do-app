@@ -1,9 +1,10 @@
 const { Router } = require('express');
-const { userSchema } = require("/schemas/usersSchema");
-const { authenticateUser } = require("/middlewares/authMiddleware");
+const { userSchema } = require("./schemas/usersSchema");
+const { authenticateUser } = require("./middlewares/authMiddleware");
 const db = require("../db");
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const userRouter = Router();
 
@@ -74,7 +75,7 @@ userRouter.post("/users/login", async (req, res) => {
                 error: "Invalid credentials"
             });
         }
-        const token = jwt.sign({ userId: user_.id }, process.env.JWT_SECRET );
+        const token = jwt.sign({ userId: user_.id }, process.env.JWT_SECRET_KEY );
         return res.status(200).json({
             success: true,
             message: "Login successful.",
@@ -89,7 +90,8 @@ userRouter.post("/users/login", async (req, res) => {
     }
 })
 
-userRouter.get("/users/current", authenticateUser,async (req, res) => {
+userRouter.get("/users/current", authenticateUser, async (req, res) => {
+    console.log("After Middleware");
     const userId = req.userId;
     try{
         const [users] = await db.execute(`select * from users where id = ?`, [userId]);

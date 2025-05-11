@@ -33,7 +33,7 @@ userRouter.post("/users/signup", async (req, res) => {
             [username, hashedPassword]
         );
         const user_id = insertResult.insertId;
-        const token = jwt.sign({userId: user_id}, process.env.JWT_SECRET);
+        const token = jwt.sign({userId: user_id}, process.env.JWT_SECRET_KEY);
         res.status(201).json({
             success: true,
             token,

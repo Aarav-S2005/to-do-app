@@ -2,6 +2,9 @@ import {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router";
 import {useAuth} from "../hooks/useAuth.jsx";
+import InputBox from "../components/InputBox.jsx";
+import GoBack from "../components/GoBack.jsx";
+
 
 export default function Signup() {
 
@@ -29,8 +32,8 @@ export default function Signup() {
             return "Password must contain an uppercase character";
         } else if (!/[0-9]/.test(password)) {
             return "Password must contain a number";
-        } else if (!/[!@#$%^&]/.test(password)) {
-            return "Password must contain at least one special character [!, @, #, $, %, ^, &]";
+        } else if (!/[!@#$^_]/.test(password)) {
+            return "Password must contain at least one special character [!, @, #, $, ^, _]";
         } else {
             return "success";
         }
@@ -42,61 +45,47 @@ export default function Signup() {
             setErrorMsg(message + "*");
             return;
         }
-        const result = await axios.post("http://localhost:5000/api/users/signup", {username, password});
-        if (result.data.success) {
-            login(result.data.token);
-            navigate("/todos");
+        setErrorMsg("")
+        try{
+            const result = await axios.post("http://localhost:5000/api/users/signup", {username, password});
+            if (result.data.success) {
+
+                login(result.data.token, username);
+                navigate("/todos");
+            }
+        }catch (error) {
+            alert(error.message);
         }
 
     }
 
     return (
         <>
+            <GoBack />
             <div className={" absolute bg-transparent w-full min-h-screen flex items-center justify-center "}>
                 <div
-                    className={"bg-gray-500 w-sm p-12 flex flex-col gap-6 font-patrick-hand-regular rounded-3xl backdrop-blur-2xl"}>
-                    <span className={"text-4xl color-quaternary font-bold text-center"}>SIGN UP</span>
+                    className={"bg-gray-500 w-[400px] p-12 flex flex-col gap-6 font-patrick-hand-regular rounded-3xl"}>
+                    <span className={"text-4xl text-offwhite font-bold text-center"}>SIGN UP</span>
                     <div className={"flex flex-col gap-5 "}>
-                        <label className={"text-2xl color-quaternary flex flex-col gap-2"}>
+                        <label className={"text-2xl text-offwhite flex flex-col gap-2"}>
                             <span>Username:</span>
-                            <input type={"text"}
-                                   className={"font-short-stack-regular px-5 py-2 border-none outline-none bg-tertiary rounded-4xl text-black"}
-                                   onChange={(e) => {
-                                       const username_ = e.target.value;
-                                       if (username_.length <= 20) {
-                                           setUsername(username_);
-                                       }
-                                   }}/>
-                        </label>
-                        <label className={"text-2xl color-quaternary flex flex-col gap-2"}>
+                            <InputBox type={"text"} maxLength={16} setterFuntion={setUsername} />
+                            </label>
+                        <label className={"text-2xl text-offwhite flex flex-col gap-2"}>
                             <span>Password:</span>
-                            <input type={"password"}
-                                   className={"font-short-stack-regular px-5 py-2 border-none outline-none bg-tertiary rounded-4xl text-black"}
-                                   onChange={(e) => {
-                                       const password_ = e.target.value;
-                                       if (password_.length <= 20) {
-                                           setPassword(password_);
-                                       }
-                                   }}/>
+                            <InputBox type={"password"} maxLength={20} setterFuntion={setPassword} />
                         </label>
-                        <label className={"text-2xl color-quaternary flex flex-col gap-2"}>
+                        <label className={"text-2xl text-offwhite flex flex-col gap-2"}>
                             <span>Re-Enter Password:</span>
-                            <input type={"password"}
-                                   className={"font-short-stack-regular px-5 py-2 border-none outline-none bg-tertiary rounded-4xl text-black"}
-                                   onChange={(e) => {
-                                       const password_ = e.target.value;
-                                       if (password_.length <= 20) {
-                                           setRePassword(password_);
-                                       }
-                                   }}/>
+                            <InputBox type={"password"} maxLength={20} setterFuntion={setRePassword} />
                         </label>
                     </div>
                     <div>
                         <button
-                            className={"bg-quaternary w-full text-gray-500 cursor-pointer rounded-xl px-4 py-2 text-3xl hover:scale-105 active:scale-90"}
+                            className={"bg-offwhite w-full text-gray-500 cursor-pointer rounded-xl px-4 py-2 text-3xl hover:scale-105 active:scale-90"}
                             onClick={handleSignup}>CREATE
                         </button>
-                        <span className={"text-red-300 text-sm"}>{`${errorMsg.toUpperCase()}`}</span>
+                        <span className={"text-red-300 text-sm"}>{`${errorMsg}`}</span>
                     </div>
                 </div>
             </div>

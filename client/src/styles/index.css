@@ -1,35 +1,21 @@
 @import "tailwindcss";
 
-.color-primary{
-    @apply text-[#F1BA88];
-}
 
-.color-secondary{
-    @apply text-[#DDEB9D];
-}
-
-.color-tertiary{
+.text-offwhite{
     @apply text-[#FAF6E9];
 }
 
-.color-quaternary{
-    @apply text-[#FAF6E9];
-}
 
-.bg-orange{
-    @apply bg-[#d4d4d4];
-}
-
-.bg-secondary{
-    @apply bg-[#DDEB9D];
-}
-
-.bg-tertiary{
+.bg-offwhite{
     @apply bg-[#FAF6E9];
 }
 
-.bg-quaternary{
-    @apply bg-[#FAF6E9];
+.bg-dark-offwhite{
+    @apply bg-[#EAE4D5];
+}
+
+.text-dark-offwhite{
+    @apply bg-[#EAE4D5];
 }
 
 .font-patrick-hand-regular {
@@ -48,4 +34,12 @@
     font-family: "Pacifico", cursive;
     font-weight: 400;
     font-style: normal;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }

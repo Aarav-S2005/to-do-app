@@ -16,9 +16,13 @@ listRouter.get("/lists", async (req, res) => {
                 message: "No lists found."
             })
         }
-        return res.status(200).json(lists);
+        return res.status(200).json({
+            data: lists,
+            success: true
+        });
     }catch(err){
         return res.status(500).json({
+            success: false,
             error: "Internal Server Error",
             message: err.message
         })
@@ -39,6 +43,7 @@ listRouter.post("/lists", async (req, res) => {
         })
     }catch (err){
         return res.status(500).json({
+            success: false,
             error: "Internal Server Error",
             message: err.message
         })

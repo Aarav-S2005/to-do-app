@@ -6,7 +6,7 @@ function App() {
 
     return (
         <>
-            <div className={"absolute w-full min-h-screen bg-[url('../assets/img/abstractIMG.png')] bg-cover bg-center bg-no-repeat "}>
+            <div className={"absolute w-full min-h-screen bg-[url('../assets/img/abstractIMG.png')] bg-cover bg-center bg-no-repeat overflow-hidden"}>
 
             </div>
             <AuthProvider>

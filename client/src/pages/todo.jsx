@@ -1,7 +1,120 @@
+import {Link} from "react-router";
+import {useAuth} from "../hooks/useAuth.jsx";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import { IoIosAdd } from "react-icons/io";
+import ListInput from "../components/ListInput.jsx";
+import List from "../components/List.jsx";
 
 export default function ToDo() {
+
+    const { logout } = useAuth();
+    const [lists, setLists] = useState([]);
+    const [username, setUsername] = useState("");
+    const [token, setToken] = useState("");
+    const  [isAddingList, setIsAddingList] = useState(false);
+    const [listTitle, setListTitle] = useState("");
+
+    const fetchData = async () => {
+        try{
+            const token = localStorage.getItem("token");
+            const result = await axios.get("http://localhost:5000/api/lists", {
+                headers: {
+                    authorization: `Bearer ${token}`
+                }
+            });
+            if (result.status === 200) {
+                setLists(result.data.data);
+            }
+            else{
+                alert(result.status);
+            }
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    // Fetch all lists on when page is first shown up
+    useEffect(() => {
+        fetchData();
+
+        setUsername(localStorage.getItem("username"));
+        setToken(localStorage.getItem("token"));
+
+    }, []);
+
+    const addList = async (title) => {
+        if (title === "") {
+            title = "untitled";
+        }
+        try {
+            const result = await axios.post(
+                "http://localhost:5000/api/lists",
+                { title },
+                {
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (result.status === 201) {
+                await fetchData();
+            } else {
+                alert("Internal Server Error");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const handleAddList = () => {
+        setIsAddingList(true);
+    }
+
     return (
         <>
+            <div className={"absolute w-screen h-screen overflow-hidden"}>
+                <nav className={" w-full bg-[#273F4F] text-white p-3 flex items-center justify-between"}>
+                    <span className={"font-pacifico-regular text-5xl"}>ToDoVerse</span>
+                    <div className={"flex items-center justify-center font-patrick-hand-regular gap-5 text-3xl"}>
+                        <Link to={"/signup"}>
+                            <button
+                                className={"px-3 text-[#273F4F] rounded-lg bg-white cursor-pointer active:scale-95"}
+                                onClick={logout}>LOGOUT
+                            </button>
+                        </Link>
+                    </div>
+                </nav>
+                <div className={"flex relative"}>
+                    <div className="flex min-w-0 flex-col gap-2 basis-1/4 p-2 font-short-stack-regular bg-gray-800 h-[calc(100vh-64px)]">
+                        <div className="py-5 flex justify-between items-center text-offwhite">
+                            <span className="text-3xl">{username}</span>
+                            <IoIosAdd className="bg-offwhite text-[#273F4F] mx-1 rounded-xl" size="36"
+                                      onClick={handleAddList}/>
+                        </div>
+                        <div className="flex-1 flex flex-col gap-2 overflow-y-auto no-scrollbar pb-4">
+                            {isAddingList && (
+                                <ListInput
+                                    setterFunction={setListTitle}
+                                    listTitle={listTitle}
+                                    setIsAdding={setIsAddingList}
+                                    addList={addList}
+                                />
+                            )}
+                            {lists.map((item) => (
+                                <List
+                                    key={item.id}
+                                    title={item.title}
+                                />
+
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <div className={"flex flex-col gap-2 basis-3/4"}>
+
+                </div>
+            </div>
         </>
     )
 }

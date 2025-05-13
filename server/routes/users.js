@@ -91,7 +91,6 @@ userRouter.post("/users/login", async (req, res) => {
 })
 
 userRouter.get("/users/current", authenticateUser, async (req, res) => {
-    console.log("After Middleware");
     const userId = req.userId;
     try{
         const [users] = await db.execute(`select * from users where id = ?`, [userId]);

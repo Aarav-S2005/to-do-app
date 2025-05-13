@@ -4,22 +4,20 @@ import Signup from "./pages/signup.jsx";
 import Login from "./pages/login.jsx";
 import ToDo from "./pages/todo.jsx";
 import {useAuth} from "./hooks/useAuth.jsx";
+import {useEffect} from "react";
+import axios from "axios";
 
 export default function RoutePages() {
 
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, login } = useAuth();
 
     return(
         <BrowserRouter>
             <Routes>
-                <Route path={"/"} element={<Landing/>}/>
-                <Route path={"/signup"} element={<Signup/>}/>
+                <Route path={"/"} element={<Landing />}/>
+                <Route path={"/signup"} element={<Signup />}/>
                 <Route path={"/login"} element={<Login />} />
-                <Route path={"/todos"} element={
-                    isLoggedIn ?
-                    <ToDo /> :
-                        <Navigate to={"/login"} />
-                }/>
+                <Route path={"/todos"} element={ isLoggedIn ? <ToDo /> : <Navigate to={"/"} />} />
             </Routes>
         </BrowserRouter>
     )

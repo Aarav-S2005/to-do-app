@@ -104,7 +104,7 @@ listRouter.delete("/lists/:listId", async (req, res) => {
             })
         }
         await db.execute(`delete from lists where user_id = ? and id = ?;`, [ userId, listId]);
-        return res.status(200).json({
+        return res.status(204).json({
             success: true,
             message: "List deleted successfully."
         })

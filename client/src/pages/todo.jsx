@@ -5,17 +5,23 @@ import axios from "axios";
 import { IoIosAdd } from "react-icons/io";
 import ListInput from "../components/ListInput.jsx";
 import List from "../components/List.jsx";
+import Todo from "../components/Todo.jsx";
+import AddOrEditTodo from "../components/AddOrEditTodo.jsx";
 
 export default function ToDo() {
 
     const { logout } = useAuth();
     const [lists, setLists] = useState([]);
+    const [todos, setTodos] = useState([]);
     const [username, setUsername] = useState("");
     const [token, setToken] = useState("");
-    const  [isAddingList, setIsAddingList] = useState(false);
+    const [isAddingList, setIsAddingList] = useState(false);
     const [listTitle, setListTitle] = useState("");
+    const [currentList, setCurrentList] = useState("");
+    const [currentListId, setCurrentListId] = useState(0);
+    const [isAddingEditingTodo, setIsAddingEditingTodo] = useState(false);
 
-    const fetchData = async () => {
+    const fetchLists = async () => {
         try{
             const token = localStorage.getItem("token");
             const result = await axios.get("http://localhost:5000/api/lists", {
@@ -36,7 +42,7 @@ export default function ToDo() {
 
     // Fetch all lists on when page is first shown up
     useEffect(() => {
-        fetchData();
+        fetchLists();
 
         setUsername(localStorage.getItem("username"));
         setToken(localStorage.getItem("token"));
@@ -59,7 +65,7 @@ export default function ToDo() {
             );
 
             if (result.status === 201) {
-                await fetchData();
+                await fetchLists();
             } else {
                 alert("Internal Server Error");
             }
@@ -67,12 +73,18 @@ export default function ToDo() {
             console.log(error);
         }
     };
+
     const handleAddList = () => {
         setIsAddingList(true);
     }
 
+    const handleAddTodo = () => {
+        setIsAddingEditingTodo(true);
+    }
+
     return (
         <>
+            {isAddingEditingTodo && <AddOrEditTodo />}
             <div className={"absolute w-screen h-screen overflow-hidden"}>
                 <nav className={" w-full bg-[#273F4F] text-white p-3 flex items-center justify-between"}>
                     <span className={"font-pacifico-regular text-5xl"}>ToDoVerse</span>
@@ -86,9 +98,10 @@ export default function ToDo() {
                     </div>
                 </nav>
                 <div className={"flex relative"}>
-                    <div className="flex min-w-0 flex-col gap-2 basis-1/4 p-2 font-short-stack-regular bg-gray-800 h-[calc(100vh-64px)]">
+                    <div
+                        className="flex min-w-0 flex-col gap-2 basis-1/4 p-2 font-short-stack-regular bg-gray-800 h-[calc(100vh-64px)]">
                         <div className="py-5 flex justify-between items-center text-offwhite">
-                            <span className="text-3xl">{username}</span>
+                            <span className="text-3xl font-patrick-hand-regular ml-1">{username}</span>
                             <IoIosAdd className="bg-offwhite text-[#273F4F] mx-1 rounded-xl" size="36"
                                       onClick={handleAddList}/>
                         </div>
@@ -104,15 +117,36 @@ export default function ToDo() {
                             {lists.map((item) => (
                                 <List
                                     key={item.id}
+                                    id={item.id}
                                     title={item.title}
+                                    setLists={setLists}
+                                    setTodos={setTodos}
+                                    setCurrentList={setCurrentList}
+                                    setCurrentListId={setCurrentListId}
                                 />
 
                             ))}
                         </div>
                     </div>
-                </div>
-                <div className={"flex flex-col gap-2 basis-3/4"}>
-
+                    <div className={"flex flex-col gap-2 basis-3/4 font-short-stack-regular m-2"}>
+                        {todos &&
+                            <div className={"flex justify-between items-center"}>
+                                <span className={"text-teal-500 text-4xl font-patrick-hand-regular my-2 mx-3 "}>
+                                    {currentList}
+                                </span>
+                                {currentList && <IoIosAdd className="bg-[#E9DFC3] text-[#273F4F] mx-1 rounded-xl" size="36" onClick={handleAddTodo}/>}
+                            </div>}
+                        {todos.map((item) => (
+                            <Todo
+                                key={item.id}
+                                id={item.id}
+                                title={item.title}
+                                completed={item.completed}
+                                listId={currentListId}
+                                setTodos={setTodos}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </>

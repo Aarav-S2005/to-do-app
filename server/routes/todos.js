@@ -19,12 +19,8 @@ todoRouter.get("/lists/:listId/todos", async (req, res) => {
             [listId, userId]
         );
 
-        if (todos.length === 0) {
-            return res.status(404).json({
-                error: "No todos found for this list",
-            });
-        }
-        res.status(200).json(todos);
+
+        return res.status(200).json(todos);
     } catch (err) {
         return res.status(500).json({
             error: "Internal Server Error",
@@ -106,7 +102,7 @@ todoRouter.put("/lists/:listId/todos/:todoId", async (req, res) => {
             todoId,
             listId
         ])
-        return res.status(200).send("success");
+        return res.status(201).send("success");
     }catch (error) {
         return res.status(500).json({
             error: "Internal Server Error",
@@ -135,7 +131,7 @@ todoRouter.delete("/lists/:listId/todos/:todoId", async (req, res) => {
         await db.execute(`
             delete from todos where id = ? and list_id = ?;
         `, [ todoId, listId ])
-        return res.status(200).send("success");
+        return res.status(204).send("success");
     }catch (error) {
         return res.status(500).json({
             error: "Internal Server Error",

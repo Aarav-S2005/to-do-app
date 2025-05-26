@@ -3,10 +3,10 @@ import {useAuth} from "../hooks/useAuth.jsx";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import { IoIosAdd } from "react-icons/io";
-import ListInput from "../components/ListInput.jsx";
+import ListInput from "../components/inputs/ListInput.jsx";
 import List from "../components/List.jsx";
 import Todo from "../components/Todo.jsx";
-import AddOrEditTodo from "../components/AddOrEditTodo.jsx";
+import AddOrEditTodo from "../components/modals/AddOrEditTodo.jsx";
 
 export default function ToDo() {
 
@@ -19,7 +19,8 @@ export default function ToDo() {
     const [listTitle, setListTitle] = useState("");
     const [currentList, setCurrentList] = useState("");
     const [currentListId, setCurrentListId] = useState(0);
-    const [isAddingEditingTodo, setIsAddingEditingTodo] = useState(false);
+    const [currentTodoId, setCurrentTodoId] = useState(0);
+    const [isAddingEditing, setIsAddingEditing] = useState(false);
 
     const fetchLists = async () => {
         try{
@@ -79,12 +80,17 @@ export default function ToDo() {
     }
 
     const handleAddTodo = () => {
-        setIsAddingEditingTodo(true);
+        setIsAddingEditing(true);
     }
 
     return (
         <>
-            {isAddingEditingTodo && <AddOrEditTodo />}
+            {isAddingEditing && <AddOrEditTodo
+                type={'add'}
+                listId={currentListId}
+                setTodos={setTodos}
+                setIsAddingEditingTodo={setIsAddingEditing}
+            />}
             <div className={"absolute w-screen h-screen overflow-hidden"}>
                 <nav className={" w-full bg-[#273F4F] text-white p-3 flex items-center justify-between"}>
                     <span className={"font-pacifico-regular text-5xl"}>ToDoVerse</span>
@@ -98,8 +104,10 @@ export default function ToDo() {
                     </div>
                 </nav>
                 <div className={"flex relative"}>
-                    <div
-                        className="flex min-w-0 flex-col gap-2 basis-1/4 p-2 font-short-stack-regular bg-gray-800 h-[calc(100vh-64px)]">
+
+                    {/* Lists Part */}
+
+                    <div className="flex min-w-0 flex-col gap-2 basis-1/4 p-2 font-short-stack-regular bg-gray-800 h-[calc(100vh-64px)]">
                         <div className="py-5 flex justify-between items-center text-offwhite">
                             <span className="text-3xl font-patrick-hand-regular ml-1">{username}</span>
                             <IoIosAdd className="bg-offwhite text-[#273F4F] mx-1 rounded-xl" size="36"
@@ -128,7 +136,10 @@ export default function ToDo() {
                             ))}
                         </div>
                     </div>
-                    <div className={"flex flex-col gap-2 basis-3/4 font-short-stack-regular m-2"}>
+
+                    {/* Todos Part */}
+
+                    <div className={"flex min-w-0 flex-col gap-2 basis-3/4 font-short-stack-regular m-2 h-[calc(100vh-64px)]"}>
                         {todos &&
                             <div className={"flex justify-between items-center"}>
                                 <span className={"text-teal-500 text-4xl font-patrick-hand-regular my-2 mx-3 "}>
@@ -138,12 +149,14 @@ export default function ToDo() {
                             </div>}
                         {todos.map((item) => (
                             <Todo
-                                key={item.id}
                                 id={item.id}
                                 title={item.title}
                                 completed={item.completed}
+                                dueDate={item.dueDate}
                                 listId={currentListId}
                                 setTodos={setTodos}
+                                setIsAddingEditing={setIsAddingEditing}
+                                isAddingEditing={isAddingEditing}
                             />
                         ))}
                     </div>

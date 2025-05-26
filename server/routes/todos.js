@@ -49,11 +49,17 @@ todoRouter.post("/lists/:listId/todos", async (req, res) => {
         if (lists.length === 0) {
             return res.status(403).json({ error: "Unauthorized or list not found" });
         }
-        await db.execute(`INSERT INTO todos (list_id, title, description, completed, due_date)
-                          VALUES (?, ?, ?, ?, ?)`,
+        const [insertResult] = await db.execute(`INSERT INTO todos (list_id, title, description, completed, due_date) VALUES (?, ?, ?, ?, ?)`,
             [listId, title, description, completed, dueDate]
-        )
-        return res.status(201).send("success");
+        );
+        
+        const [newTodoRows] = await db.execute(`SELECT * FROM todos WHERE id = ?`, [insertResult.insertId]);
+
+        return res.status(201).json({
+            success: true,
+            data: newTodoRows[0],
+        });
+
 
     }catch (error) {
         return res.status(500).json({
@@ -69,6 +75,8 @@ todoRouter.put("/lists/:listId/todos/:todoId", async (req, res) => {
     const  todoId  = parseInt(req.params.todoId);
     const userId = req.userId;
     const todo = req.body;
+    console.log('hello')
+    console.log(req.body)
     const result = todoUpdateSchema.safeParse(todo);
     if (!result.success){
         return res.status(400).json({
@@ -102,7 +110,10 @@ todoRouter.put("/lists/:listId/todos/:todoId", async (req, res) => {
             todoId,
             listId
         ])
-        return res.status(201).send("success");
+        return res.status(201).json({
+            success: true,
+            data: result.data
+        });
     }catch (error) {
         return res.status(500).json({
             error: "Internal Server Error",
@@ -146,8 +157,17 @@ todoRouter.get("/lists/:listId/todos/:todoId", async (req, res) => {
     const userId = req.userId;
     try{
         const [ todoPresent ] = await db.execute(
-            `SELECT * FROM todos t JOIN lists l on t.list_id = l.id
-             WHERE t.id = ? AND t.list_id = ? AND l.user_id = ?;`,
+            `SELECT
+                 t.id AS todoId,
+                 t.title AS title,
+                 t.description,
+                 t.due_date,
+                 t.completed,
+                 l.id AS listId,
+                 l.title AS listTitle 
+             FROM todos t JOIN lists l ON t.list_id = l.id
+             WHERE t.id = ? AND t.list_id = ? AND l.user_id = ?;
+            `,
             [todoId, listId, userId]
         )
         if (todoPresent.length === 0){
@@ -155,7 +175,12 @@ todoRouter.get("/lists/:listId/todos/:todoId", async (req, res) => {
                 error: "Todo not found"
             })
         }
-        return res.status(200).json(todoPresent[0]);
+
+        return res.status(200).json(
+            {
+                data: todoPresent[0],
+                success: true
+            });
     }catch (error) {
         return res.status(500).json({
             error: "Internal Server Error",

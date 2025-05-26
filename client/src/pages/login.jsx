@@ -2,7 +2,7 @@ import {useState} from "react";
 import {useAuth} from "../hooks/useAuth.jsx";
 import axios from "axios";
 import {useNavigate} from "react-router";
-import InputBox from "../components/InputBox.jsx";
+import InputBox from "../components/inputs/InputBox.jsx";
 import GoBack from "../components/GoBack.jsx";
 
 export default function Login() {

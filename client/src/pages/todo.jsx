@@ -19,7 +19,6 @@ export default function ToDo() {
     const [listTitle, setListTitle] = useState("");
     const [currentList, setCurrentList] = useState("");
     const [currentListId, setCurrentListId] = useState(0);
-    const [currentTodoId, setCurrentTodoId] = useState(0);
     const [isAddingEditing, setIsAddingEditing] = useState(false);
 
     const fetchLists = async () => {
@@ -93,7 +92,7 @@ export default function ToDo() {
             />}
             <div className={"absolute w-screen h-screen overflow-hidden"}>
                 <nav className={" w-full bg-[#273F4F] text-white p-3 flex items-center justify-between"}>
-                    <span className={"font-pacifico-regular text-5xl"}>ToDoVerse</span>
+                    <span className={"font-pacifico-regular text-5xl select-none"}>ToDoVerse</span>
                     <div className={"flex items-center justify-center font-patrick-hand-regular gap-5 text-3xl"}>
                         <Link to={"/signup"}>
                             <button

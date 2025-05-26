@@ -4,12 +4,10 @@ import Signup from "./pages/signup.jsx";
 import Login from "./pages/login.jsx";
 import ToDo from "./pages/todo.jsx";
 import {useAuth} from "./hooks/useAuth.jsx";
-import {useEffect} from "react";
-import axios from "axios";
 
 export default function RoutePages() {
 
-    const { isLoggedIn, login } = useAuth();
+    const { isLoggedIn } = useAuth();
 
     return(
         <BrowserRouter>

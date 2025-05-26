@@ -52,7 +52,7 @@ todoRouter.post("/lists/:listId/todos", async (req, res) => {
         const [insertResult] = await db.execute(`INSERT INTO todos (list_id, title, description, completed, due_date) VALUES (?, ?, ?, ?, ?)`,
             [listId, title, description, completed, dueDate]
         );
-        
+
         const [newTodoRows] = await db.execute(`SELECT * FROM todos WHERE id = ?`, [insertResult.insertId]);
 
         return res.status(201).json({
@@ -75,8 +75,6 @@ todoRouter.put("/lists/:listId/todos/:todoId", async (req, res) => {
     const  todoId  = parseInt(req.params.todoId);
     const userId = req.userId;
     const todo = req.body;
-    console.log('hello')
-    console.log(req.body)
     const result = todoUpdateSchema.safeParse(todo);
     if (!result.success){
         return res.status(400).json({

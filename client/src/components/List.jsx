@@ -10,7 +10,7 @@ export default function List({id, title, setLists, setTodos, setCurrentList, set
 
     const fetchTodos = async () => {
         try {
-            const result = await axios.get(`http://localhost:5000/api/lists/${id}/todos`, {
+            const result = await axios.get(`${import.meta.env.VITE_API_URL}lists/${id}/todos`, {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem("token")}`
                 }
@@ -29,7 +29,7 @@ export default function List({id, title, setLists, setTodos, setCurrentList, set
 
     const handleDelete = async () => {
         try {
-            const result = await axios.delete(`http://localhost:5000/api/lists/${id}`,
+            const result = await axios.delete(`${import.meta.env.VITE_API_URL}lists/${id}`,
                 {
                     headers: {
                         authorization: `Bearer ${localStorage.getItem("token")}`

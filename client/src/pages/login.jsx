@@ -14,12 +14,12 @@ export default function Login() {
 
     const handleLogin = async () => {
         try{
-            const result = await axios.post("http://localhost:5000/api/users/login", {username, password});
+            const result = await axios.post(`${import.meta.env.VITE_API_URL}users/login`, {username, password});
             const token = result.data.token;
             login(token, username);
             navigate("/todos")
         }catch (error) {
-            alert("Invalid Credentials");
+            alert("Invalid Credentials. ", error);
         }
     }
 

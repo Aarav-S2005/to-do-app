@@ -47,7 +47,7 @@ export default function Signup() {
         }
         setErrorMsg("")
         try{
-            const result = await axios.post("http://localhost:5000/api/users/signup", {username, password});
+            const result = await axios.post(`${import.meta.env.VITE_API_URL}users/signup`, {username, password});
             if (result.data.success) {
 
                 login(result.data.token, username);

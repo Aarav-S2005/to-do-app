@@ -18,7 +18,7 @@ export default function Todo({title, id, completed, dueDate, listId, setTodos, s
 
     const deleteTodo = async () => {
         try{
-            const result = await axios.delete(`http://localhost:5000/api/lists/${listId}/todos/${id}`,
+            const result = await axios.delete(`${import.meta.env.VITE_API_URL}lists/${listId}/todos/${id}`,
                 {
                     headers: {
                         authorization: `Bearer ${localStorage.getItem("token")}`
@@ -35,7 +35,7 @@ export default function Todo({title, id, completed, dueDate, listId, setTodos, s
 
     const handleRadioClick = async () => {
         try{
-            const result = await axios.put(`http://localhost:5000/api/lists/${listId}/todos/${id}`,
+            const result = await axios.put(`${import.meta.env.VITE_API_URL}lists/${listId}/todos/${id}`,
                 {completed: !completed},
                 {
                     headers: {
@@ -60,7 +60,7 @@ export default function Todo({title, id, completed, dueDate, listId, setTodos, s
     const edit = async () => {
 
         try{
-            const result = await axios.get(`http://localhost:5000/api/lists/${listId}/todos/${id}`,
+            const result = await axios.get(`${import.meta.env.VITE_API_URL}lists/${listId}/todos/${id}`,
                 {
                     headers: {
                         authorization: `Bearer ${localStorage.getItem("token")}`

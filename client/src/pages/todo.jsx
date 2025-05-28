@@ -24,7 +24,7 @@ export default function ToDo() {
     const fetchLists = async () => {
         try{
             const token = localStorage.getItem("token");
-            const result = await axios.get("http://localhost:5000/api/lists", {
+            const result = await axios.get(`${import.meta.env.VITE_API_URL}lists`, {
                 headers: {
                     authorization: `Bearer ${token}`
                 }

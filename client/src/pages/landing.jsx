@@ -13,7 +13,7 @@ export default function Landing() {
             const token = localStorage.getItem("token");
             if (token){
                 try {
-                    const result = await axios.get('http://localhost:5000/api/users/current', {
+                    const result = await axios.get(`${import.meta.env.VITE_API_URL}users/current`, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },

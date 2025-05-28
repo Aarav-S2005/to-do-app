@@ -2,7 +2,7 @@ import {FaCheck} from "react-icons/fa";
 import {useState} from "react";
 import axios from "axios";
 
-export default function EditListBox({id, title, setIsEditingList, setLists}) {
+export default function EditListBox({id, title, setIsEditingList, setLists, setCurrentList}) {
 
     const [updatedTitle, setUpdatedTitle] = useState(title);
 
@@ -24,6 +24,7 @@ export default function EditListBox({id, title, setIsEditingList, setLists}) {
                     )
                 );
             }
+            setCurrentList(updatedTitle)
         }catch(error) {
             alert(error.message);
         }

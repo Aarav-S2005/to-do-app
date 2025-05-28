@@ -64,6 +64,7 @@ export default function List({id, title, setLists, setTodos, setCurrentList, set
                 title={title}
                 setLists={setLists}
                 setIsEditingList={setIsEditingList}
+                setCurrentList={setCurrentList}
             />
         )
     } else {

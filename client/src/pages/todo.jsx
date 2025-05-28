@@ -66,6 +66,7 @@ export default function ToDo() {
 
             if (result.status === 201) {
                 await fetchLists();
+                setListTitle("");
             } else {
                 alert("Internal Server Error");
             }
@@ -138,7 +139,7 @@ export default function ToDo() {
 
                     {/* Todos Part */}
 
-                    <div className={"flex min-w-0 flex-col gap-2 basis-3/4 font-short-stack-regular m-2 h-[calc(100vh-64px)]"}>
+                    <div className={"flex min-w-0 flex-col gap-2 basis-3/4 font-short-stack-regular m-2 h-[calc(100vh-72px)]"}>
                         {todos &&
                             <div className={"flex justify-between items-center"}>
                                 <span className={"text-teal-500 text-4xl font-patrick-hand-regular my-2 mx-3 "}>
@@ -146,18 +147,20 @@ export default function ToDo() {
                                 </span>
                                 {currentList && <IoIosAdd className="bg-[#E9DFC3] text-[#273F4F] mx-1 rounded-xl" size="36" onClick={handleAddTodo}/>}
                             </div>}
+                        <div className={"flex-1 flex flex-col gap-2 overflow-y-auto no-scrollbar pb-4"}>
                         {todos.map((item) => (
                             <Todo
                                 id={item.id}
                                 title={item.title}
                                 completed={item.completed}
-                                dueDate={item.dueDate}
+                                dueDate={item.due_date}
                                 listId={currentListId}
                                 setTodos={setTodos}
                                 setIsAddingEditing={setIsAddingEditing}
                                 isAddingEditing={isAddingEditing}
                             />
                         ))}
+                        </div>
                     </div>
                 </div>
             </div>

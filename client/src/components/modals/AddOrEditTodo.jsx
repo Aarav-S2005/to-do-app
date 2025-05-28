@@ -1,15 +1,14 @@
 import {useState} from "react";
 import axios from "axios";
 
-export default function AddOrEditTodo({type, prevData, listId, setTodos, currentTodoId, setIsAddingEditingTodo}) {
+export default function AddOrEditTodo({type, prevData, listId, setTodos, currentTodoId, setIsAddingEditingTodo, setType}) {
 
-    const [title, setTitle] = useState((type === "edit") ? prevData.title : "");
-    const [description, setDescription] = useState(
-        type === "edit" ? (prevData.description ?? "") : ""
-    );
+    const [title, setTitle] = useState(type === "edit" && prevData ? prevData.title : "");
+    const [description, setDescription] = useState(type === "edit" && prevData ? (prevData.description ?? "") : "");
     const [dueDate, setDueDate] = useState(
-        type === "edit" ? (prevData.dueDate ?? "") : ""
+        type === "edit" && prevData ? (prevData.due_date?.substring(0, 10) ?? "") : ""
     );
+
 
     const handleClick = async () => {
         if (title === "") return;
@@ -45,6 +44,7 @@ export default function AddOrEditTodo({type, prevData, listId, setTodos, current
                         )
                     );
                 }
+                setType("");
             }
             setIsAddingEditingTodo(false);
         }catch(err){

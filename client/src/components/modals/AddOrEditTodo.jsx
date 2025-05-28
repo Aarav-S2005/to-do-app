@@ -15,7 +15,7 @@ export default function AddOrEditTodo({type, prevData, listId, setTodos, current
         const dueDate_ = dueDate === '' ? null : dueDate;
         try{
             if (type === 'add') {
-                const result = await axios.post(`http://localhost:5000/api/lists/${listId}/todos`,
+                const result = await axios.post(`${import.meta.env.VITE_API_URL}lists/${listId}/todos`,
                     {title: title, description: description, dueDate: dueDate_},
                     {
                         headers: {
@@ -28,7 +28,7 @@ export default function AddOrEditTodo({type, prevData, listId, setTodos, current
                 }
             }
             else if (type === 'edit') {
-                const result = await axios.put(`http://localhost:5000/api/lists/${listId}/todos/${currentTodoId}`,
+                const result = await axios.put(`${import.meta.env.VITE_API_URL}lists/${listId}/todos/${currentTodoId}`,
                     {title: title, description: description, dueDate: dueDate_ },
                     {
                         headers: {
@@ -54,6 +54,7 @@ export default function AddOrEditTodo({type, prevData, listId, setTodos, current
 
     const closeModal = () => {
         setIsAddingEditingTodo(false);
+        setType("");
     }
 
     return(

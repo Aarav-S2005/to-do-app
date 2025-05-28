@@ -44,7 +44,12 @@ export default function Todo({title, id, completed, dueDate, listId, setTodos, s
                 }
             )
             if (result.status === 201) {
-                setComplete(!complete)
+                setComplete(!complete);
+                setTodos((prev) =>
+                    prev.map((todo) =>
+                        todo.id === id ? { ...todo, completed: !completed } : todo
+                    )
+                );
             }
         }
         catch(err){
@@ -126,7 +131,7 @@ export default function Todo({title, id, completed, dueDate, listId, setTodos, s
             </div>
 
             <div className={"flex items-start gap-1"}>
-                {daysToGo >= 0 && !complete && <span className={"text-gray-500 opacity-85 mr-4"}>{daysToGo} days left !!</span>}
+                {daysToGo >= 0 && !complete && <span className={"text-gray-500 opacity-85 mr-4"}>{daysToGo} day(s) left !!</span>}
                 <IoMdInformationCircleOutline className={"text-xl"} onClick={seeInfo} />
                 <FaEdit onClick={edit} />
                 <MdDelete onClick={deleteTodo} />

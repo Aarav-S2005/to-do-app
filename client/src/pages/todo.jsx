@@ -150,6 +150,7 @@ export default function ToDo() {
                         <div className={"flex-1 flex flex-col gap-2 overflow-y-auto no-scrollbar pb-4"}>
                         {todos.map((item) => (
                             <Todo
+                                key={item.id}
                                 id={item.id}
                                 title={item.title}
                                 completed={item.completed}

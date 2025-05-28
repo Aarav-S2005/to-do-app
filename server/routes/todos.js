@@ -110,7 +110,14 @@ todoRouter.put("/lists/:listId/todos/:todoId", async (req, res) => {
         ])
         return res.status(201).json({
             success: true,
-            data: result.data
+            data: {
+                id: todoId,
+                list_id: listId,
+                title,
+                description,
+                completed,
+                due_date: dueDate
+            }
         });
     }catch (error) {
         return res.status(500).json({

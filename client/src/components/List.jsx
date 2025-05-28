@@ -46,6 +46,7 @@ export default function List({id, title, setLists, setTodos, setCurrentList, set
                     }
                 });
             }
+            setTodos([]);
         } catch (error) {
             alert(error.message);
         }
